@@ -2,30 +2,39 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    dirs: {
+      appDir: 'app',
+      publicDir: 'public',
+      cssDir: 'public/stylesheets',
+      imagesDir: 'public/images',
+      javascriptsDir: 'public/scripts',
+      fontsDir: 'public/fonts',
+      foundationDir: 'bower_modules/foundation'
+    },
     pkg: grunt.file.readJSON('package.json'),
     compass: {
       options: {
-        cssDir: 'public/stylesheets',
-        imagesDir: 'public/images',
-        javascriptsDir: 'public/scripts',
-        fontsDir: 'public/fonts'
+        cssDir: '<%= dirs.cssDir %>',
+        imagesDir: '<%= dirs.imagesDir %>',
+        javascriptsDir: '<%= dirs.javascriptsDir %>',
+        fontsDir: '<%= dirs.fontsDir %>'
       },
       foundation: {
         options: {
-          sassDir: 'bower_modules/foundation/scss',
+          sassDir: '<%= dirs.foundationDir %>/scss',
           outputStyle: 'compressed'
         }
       },
       app: {
         options: {
-          sassDir: 'app/scss',
+          sassDir: '<%= dirs.appDir %>/scss',
           outputStyle: 'expanded'
         }
       }
     },
     jshint: {
       // define the files to lint
-      files: ['gruntfile.js', 'app/**/*.js'],
+      files: ['gruntfile.js', '<%= dirs.appDir %>/**.js'],
       // configure JSHint (documented at http://www.jshint.com/docs/)
       options: {
         // more options here if you want to override JSHint defaults
@@ -45,28 +54,36 @@ module.exports = function(grunt) {
       },
       foundation: {
         files: {
-          'public/scripts/foundation.min.js': ['bower_modules/foundation/js/foundation/*.js']
+          '<%= dirs.javascriptsDir %>/foundation.js': ['<%= dirs.foundationDir %>/js/foundation/*.js']
         }
       },
       app: {
         files: {
-          'public/scripts/tumbrider.min.js': ['app/js/*.js']
+          '<%= dirs.javascriptsDir %>/tumbrider.js': ['<%= dirs.appDir %>/js/*.js']
         }
       }
     },
+    copy: {
+      foundation: {
+        files: [
+          {expand: true, cwd: '<%= dirs.foundationDir %>/js/vendor/', src: '*.js', dest: '<%= dirs.javascriptsDir %>'}
+        ]
+      }
+    },
     watch: {
-      files: ['app/js/*.js'],
+      files: ['<%= dirs.appDir %>/js/*.js'],
       tasks: ['jshint', 'uglify:app']
     },
-    clean: ['public/']
+    clean: ['<%= dirs.publicDir %>']
   });
 
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task(s).
-  grunt.registerTask('default', ['compass', 'jshint', 'uglify']);
+  grunt.registerTask('default', ['compass', 'jshint', 'uglify', 'copy']);
 };
