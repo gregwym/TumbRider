@@ -1,0 +1,8 @@
+{
+  "name": "TumbRider",
+  "dependencies": {
+    "foundation": "4.x"
+  },
+  "devDependencies": {
+  }
+}

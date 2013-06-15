@@ -14,3 +14,8 @@ results
 npm-debug.log
 node_modules
 
+bower_modules
+
+credentials.js
+public/**
+.sass-cache/**
