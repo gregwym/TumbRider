@@ -7,5 +7,7 @@
 // information.
 module.exports = function routes() {
   this.root('pages#main');
-  this.match('tumblr/:blog', 'tumblr#blogposts');
+  this.resources('tumblr', function() {
+    this.resources('posts');
+  });
 };
