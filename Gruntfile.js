@@ -71,8 +71,14 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['<%= dirs.appDir %>/js/*.js'],
-      tasks: ['jshint', 'uglify:app']
+      appjs: {
+        files: ['<%= dirs.appDir %>/js/*.js'],
+        tasks: ['uglify:app']
+      },
+      app: {
+        files: ['<%= dirs.appDir %>/scss/*'],
+        tasks: ['compass:app']
+      }
     },
     clean: ['<%= dirs.publicDir %>']
   });
