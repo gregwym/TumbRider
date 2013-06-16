@@ -1,0 +1,8 @@
+extends ../layout
+
+block container
+	each post in posts
+		a(href="#{post.image_permalink}")
+			.panel.post
+				each photo in post.photos
+					img(src="#{photo.original_size.url}", width="200")

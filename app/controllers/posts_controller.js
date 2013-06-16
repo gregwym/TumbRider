@@ -3,17 +3,22 @@ var locomotive = require('locomotive'),
     request = require('request'),
     credentials = require('../../config/credentials.js');
 
-var TumblrController = new Controller();
+var PostsController = new Controller();
 
-TumblrController.blogposts = function() {
+PostsController.display = function(blog, offset) {
   var self = this;
   var api_key = credentials.tumblr_consumer_key;
-  var url = 'http://api.tumblr.com/v2/blog/' + self.param('blog') + '/posts?api_key=' + api_key;
+  var url = 'http://api.tumblr.com/v2/blog/' + blog + '/posts?api_key=' + api_key;
+  if (typeof offset !== 'undefined') {
+    url += '&offset=' + offset;
+  }
+
+  self.title = '"' + blog + '" Posts';
 
   var render_output = function(body) {
-    self.body = body;
+    self.posts = body.response.posts;
     self.respond({
-      // 'html': true,
+      'html': { template: 'grid' },
       'json': function() { self.res.json(body); }
     });
   };
@@ -31,4 +36,15 @@ TumblrController.blogposts = function() {
   });
 };
 
-module.exports = TumblrController;
+PostsController.index = function() {
+  var blog = this.param('tumblr_id');
+  this.display(blog);
+};
+
+PostsController.show = function() {
+  var blog = this.param('tumblr_id');
+  var offset = this.param('id');
+  this.display(blog, offset);
+};
+
+module.exports = PostsController;
