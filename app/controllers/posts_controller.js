@@ -8,7 +8,7 @@ var PostsController = new Controller();
 PostsController.display = function(blog, offset) {
   var self = this;
   var api_key = credentials.tumblr_consumer_key;
-  var url = 'http://api.tumblr.com/v2/blog/' + blog + '/posts?api_key=' + api_key;
+  var url = 'http://api.tumblr.com/v2/blog/' + blog + '/posts?type=photo&api_key=' + api_key;
   if (typeof offset !== 'undefined') {
     url += '&offset=' + offset;
   }
