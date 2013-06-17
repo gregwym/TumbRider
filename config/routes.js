@@ -11,9 +11,10 @@ module.exports = function routes() {
   this.root('pages#main');
 
   // Authentication
+  this.get('login', 'pages#login');
   this.post('login',
             passport.authenticate('local', {successRedirect: '/',
-                                            failureRedirect: '/'}));
+                                            failureRedirect: '/login'}));
 
   this.resources('tumblr', function() {
     this.resources('posts');

@@ -1,0 +1,24 @@
+.contain-to-grid.sticky
+	nav.top-bar(data-option="is_hover:false")
+		ul.title-area
+			li.name
+				h1: a(href="/") TumbRider
+			li.toggle-topbar.menu-icon
+				a(href="#"): span Menu
+		section.top-bar-section
+			ul.right
+				if locals.user
+					li.has-dropdown
+						a(href="#") #{user.username}
+						ul.dropdown
+							li: a(href="#") Account
+							li: a(href="#") Logout
+				else
+					li.has-form: form(action="login", method="post")
+						.row
+							.small-5.columns
+								input(name="username", type="text", placeholder="Username")
+							.small-5.columns
+								input(name="password", type="password", placeholder="Password")
+							.small-2.columns
+								input(type="submit", value="Login")

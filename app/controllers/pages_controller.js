@@ -4,12 +4,13 @@ Controller = locomotive.Controller;
 var PagesController = new Controller();
 
 PagesController.main = function() {
+  this.res.send('Welcome ' + this.req.user.username);
+};
+
+PagesController.login = function() {
   this.title = 'TumbRider';
-  if (this.req.isAuthenticated()) {
-    this.res.send("Logged in");
-  } else {
-    this.render();
-  }
+  this.user = this.req.user;
+  this.render();
 };
 
 module.exports = PagesController;
