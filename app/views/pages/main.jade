@@ -1,10 +1,21 @@
-!!! 5
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    h1= title
-    p Welcome aboard! Visit
-      a(href="http://locomotivejs.org/") locomotivejs.org
-      for details.
+extends ../layout
+
+block container
+	.row
+		form.large-6.large-centered.columns.panel.radius(action="/login", method="post")
+			fieldset
+				legend Login
+				.row
+					.small-3.columns
+						label.right.inline(for="username") Username:
+					.small-9.columns
+						input#username(name="username", type="text", placeholder="Username")
+				.row
+					.small-3.columns
+						label.right.inline(for="password") Password:
+					.small-9.columns
+						input#password(name="password", type="password", placeholder="Password")
+				.row
+					.small-9.small-offset-3.columns
+						input#submit(type="submit", value="Login")
+
