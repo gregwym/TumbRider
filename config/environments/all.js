@@ -1,5 +1,6 @@
 var express = require('express'),
     poweredBy = require('connect-powered-by'),
+    passport = require('passport'),
     util = require('util');
 
 module.exports = function() {
@@ -40,7 +41,11 @@ module.exports = function() {
   this.use(express.logger());
   this.use(express.favicon());
   this.use(express.static(__dirname + '/../../public'));
+  this.use(express.cookieParser());
   this.use(express.bodyParser());
+  this.use(express.session({ secret: 'keyboard cat' }));
+  this.use(passport.initialize());
+  this.use(passport.session());
   this.use(express.methodOverride());
   this.use(this.router);
 };
