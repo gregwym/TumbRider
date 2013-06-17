@@ -54,7 +54,9 @@ module.exports = function(grunt) {
       },
       foundation: {
         files: {
-          '<%= dirs.javascriptsDir %>/foundation.js': ['<%= dirs.foundationDir %>/js/foundation/*.js']
+          '<%= dirs.javascriptsDir %>/foundation.js':
+            ['<%= dirs.foundationDir %>/js/foundation/foundation.js',
+             '<%= dirs.foundationDir %>/js/foundation/foundation.*.js']
         }
       },
       app: {
