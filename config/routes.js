@@ -11,10 +11,27 @@ module.exports = function routes() {
   this.root('pages#main');
 
   // Authentication
-  this.get('login', 'pages#login');
-  this.post('login',
-            passport.authenticate('local', {successRedirect: '/',
-                                            failureRedirect: '/login'}));
+  this.get('login', 'pages#login', { as: 'login'});
+  this.post('login', function(req, res, next){
+    passport.authenticate('local', function(err, user, info){
+      // This is the default destination upon successful login.
+      var redirectUrl = '/';
+
+      if (err) { return next(err); }
+      if (!user) { return res.redirect('/login'); }
+
+      // If we have previously stored a redirectUrl, use that,
+      // otherwise, use the default.
+      if (req.session.redirectUrl) {
+        redirectUrl = req.session.redirectUrl;
+        req.session.redirectUrl = null;
+      }
+      req.logIn(user, function(err){
+        if (err) { return next(err); }
+      });
+      res.redirect(redirectUrl);
+    })(req, res, next);
+  });
 
   this.resources('tumblr', function() {
     this.resources('posts');

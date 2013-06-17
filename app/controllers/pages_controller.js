@@ -1,16 +1,27 @@
 var locomotive = require('locomotive'),
-Controller = locomotive.Controller;
+    Controller = require('../common/base_controller');
 
 var PagesController = new Controller();
 
 PagesController.main = function() {
-  this.res.send('Welcome ' + this.req.user.username);
+  if(this.requireLogin()) {
+    this.res.send('Welcome ' + this.req.user.username);
+  }
 };
 
 PagesController.login = function() {
-  this.title = 'TumbRider';
-  this.user = this.req.user;
+  // Record redirect url first
+  var redirectUrl = this.req.session.redirectUrl;
+  // If has login, redirect to last page.
+  if (this.checkLogin()) {
+    return this.redirect(redirectUrl);
+  }
   this.render();
 };
+
+PagesController.before('main', function(next) {
+  this.checkLogin();
+  return next();
+});
 
 module.exports = PagesController;

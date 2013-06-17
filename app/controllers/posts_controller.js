@@ -1,14 +1,15 @@
 var locomotive = require('locomotive'),
-    Controller = locomotive.Controller,
-    request = require('request'),
-    credentials = require('../../config/credentials.js');
+    Controller = require('../common/base_controller'),
+    request = require('request');
 
 var PostsController = new Controller();
 
 PostsController.display = function(blog, offset) {
+  this.loadCredentials();
+
   var self = this;
-  var api_key = credentials.tumblr_consumer_key;
-  var url = 'http://api.tumblr.com/v2/blog/' + blog + '/posts?type=photo&api_key=' + api_key;
+  var api_key = this.credentials.tumblr_consumer_key;
+  var url = 'http://api.tumblr.com/v2/blog/' + blog + '/posts/photo?api_key=' + api_key;
   if (typeof offset !== 'undefined') {
     url += '&offset=' + offset;
   }
@@ -46,5 +47,10 @@ PostsController.show = function() {
   var offset = this.param('id');
   this.display(blog, offset);
 };
+
+PostsController.before('*', function(next) {
+  this.checkLogin();
+  return next();
+});
 
 module.exports = PostsController;
