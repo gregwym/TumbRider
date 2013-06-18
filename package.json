@@ -10,7 +10,8 @@
     "jade": "0.31.x",
     "request": "2.x",
     "passport": "~0.1.17",
-    "passport-local": "~0.1.6"
+    "passport-local": "~0.1.6",
+    "passport-tumblr": "~0.1.2"
   },
   "devDependencies": {
     "bower": "~0.9.2",

@@ -17,6 +17,13 @@ module.exports = function routes() {
   this.get('logout', 'pages#logout', { as: 'logout'});
   this.get('redirect', 'pages#redirectTo', { as: 'redirect'});
 
+  this.namespace('auth', function() {
+    this.get('tumblr', passport.authenticate('tumblr'));
+    this.get('tumblr/callback', passport.authenticate('tumblr', { successRedirect: '/auth/tumblr/status',
+                                                                  failureRedirect: '/login' }));
+    this.get('tumblr/status', 'tumblr#status');
+  });
+
   this.resources('tumblr', function() {
     this.resources('posts');
   });
