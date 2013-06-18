@@ -11,6 +11,7 @@ util.inherits(Controller, locomotive.Controller);
 Controller.prototype.init = function() {
   this.LOGIN_PATH = this.loginPath();
   this.LOGOUT_PATH = this.logoutPath();
+  this.REDIRECT_PATH = this.redirectPath();
 
   this.user = this.req.user;
 };
