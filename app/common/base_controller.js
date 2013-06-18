@@ -15,6 +15,8 @@ Controller.prototype.loadCredentials = function() {
 Controller.prototype.checkLogin = function() {
   this.req.session.redirectUrl = this.req.url;
   this.user = this.req.user;
+  this.LOGIN_PATH = this.loginPath();
+  this.LOGOUT_PATH = this.logoutPath();
   return this.req.isAuthenticated();
 };
 

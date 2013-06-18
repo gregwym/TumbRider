@@ -12,11 +12,23 @@ PagesController.main = function() {
 PagesController.login = function() {
   // Record redirect url first
   var redirectUrl = this.req.session.redirectUrl;
+  if (!redirectUrl) {
+    redirectUrl = '/';
+  }
   // If has login, redirect to last page.
   if (this.checkLogin()) {
     return this.redirect(redirectUrl);
   }
   this.render();
+};
+
+PagesController.logout = function() {
+  var redirectUrl = this.req.session.redirectUrl;
+  if (!redirectUrl) {
+    redirectUrl = '/';
+  }
+  this.req.logout();
+  this.redirect(redirectUrl);
 };
 
 PagesController.before('main', function(next) {

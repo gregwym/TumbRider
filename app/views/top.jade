@@ -12,9 +12,9 @@
 						a(href="#") #{user.username}
 						ul.dropdown
 							li: a(href="#") Account
-							li: a(href="#") Logout
+							li: a(href="#{LOGOUT_PATH}") Logout
 				else
-					li.has-form: form(action="/login", method="post")
+					li.has-form: form(action="#{LOGIN_PATH}", method="post")
 						.row
 							.small-5.columns
 								input(name="username", type="text", placeholder="Username")

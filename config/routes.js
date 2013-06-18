@@ -26,12 +26,13 @@ module.exports = function routes() {
         redirectUrl = req.session.redirectUrl;
         req.session.redirectUrl = null;
       }
-      req.logIn(user, function(err){
+      req.login(user, function(err){
         if (err) { return next(err); }
       });
       res.redirect(redirectUrl);
     })(req, res, next);
   });
+  this.get('logout', 'pages#logout', { as: 'logout'});
 
   this.resources('tumblr', function() {
     this.resources('posts');
