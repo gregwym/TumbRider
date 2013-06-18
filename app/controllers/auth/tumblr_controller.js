@@ -4,7 +4,7 @@ var locomotive = require('locomotive'),
 var AuthController = new Controller();
 
 AuthController.status = function() {
-  this.res.json(this.req.user);
+  this.res.json({ user: this.req.user, account: this.req.account});
 };
 
 AuthController.before('*', function(next) {
