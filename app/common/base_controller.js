@@ -8,24 +8,32 @@ function Controller () {
 
 util.inherits(Controller, locomotive.Controller);
 
-Controller.prototype.loadCredentials = function() {
-    this.credentials = credentials;
-};
-
-Controller.prototype.checkLogin = function() {
-  this.req.session.redirectUrl = this.req.url;
-  this.user = this.req.user;
+Controller.prototype.init = function() {
   this.LOGIN_PATH = this.loginPath();
   this.LOGOUT_PATH = this.logoutPath();
+
+  this.user = this.req.user;
+};
+
+Controller.prototype.isLogin = function() {
   return this.req.isAuthenticated();
 };
 
 Controller.prototype.requireLogin = function() {
-  var result = this.checkLogin();
+  var result = this.isLogin();
   if (!result) {
     this.redirect(this.loginPath());
   }
   return result;
 };
+
+Controller.prototype.loadCredentials = function() {
+    this.credentials = credentials;
+};
+
+Controller.prototype.setRedirectUrl = function(url) {
+  this.req.session.redirectUrl = url || this.req.url;
+};
+
 
 module.exports = Controller;

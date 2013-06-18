@@ -49,7 +49,8 @@ PostsController.show = function() {
 };
 
 PostsController.before('*', function(next) {
-  this.checkLogin();
+  this.init();
+  this.setRedirectUrl();
   return next();
 });
 

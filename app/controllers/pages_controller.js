@@ -10,29 +10,20 @@ PagesController.main = function() {
 };
 
 PagesController.login = function() {
-  // Record redirect url first
-  var redirectUrl = this.req.session.redirectUrl;
-  if (!redirectUrl) {
-    redirectUrl = '/';
-  }
   // If has login, redirect to last page.
-  if (this.checkLogin()) {
-    return this.redirect(redirectUrl);
+  if (this.isLogin()) {
+    return this.redirect(this.req.session.redirectUrl || '/');
   }
   this.render();
 };
 
 PagesController.logout = function() {
-  var redirectUrl = this.req.session.redirectUrl;
-  if (!redirectUrl) {
-    redirectUrl = '/';
-  }
   this.req.logout();
-  this.redirect(redirectUrl);
+  this.redirect(this.req.session.redirectUrl || '/');
 };
 
-PagesController.before('main', function(next) {
-  this.checkLogin();
+PagesController.before('*', function(next) {
+  this.init();
   return next();
 });
 
