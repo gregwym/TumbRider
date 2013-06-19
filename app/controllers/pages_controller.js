@@ -1,11 +1,13 @@
-var locomotive = require('locomotive'),
-    Controller = require('../common/base_controller');
+var Controller = require('../common/base_controller');
 
 var PagesController = new Controller();
 
 PagesController.main = function() {
-  if(this.requireLogin()) {
-    this.res.send('Welcome ' + this.req.user.username);
+  var userAgent = this.req.headers['user-agent'];
+  if (userAgent.match(/(iOS|iPad|iPhone|Android|Touch|BlackBerry|RIM|IEMobile)/ig) !== null) {
+    this.redirect(this.cardsPath());
+  } else {
+    this.res.send('User-agent: ' + this.req.headers['user-agent']);
   }
 };
 
