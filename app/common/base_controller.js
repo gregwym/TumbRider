@@ -4,9 +4,14 @@ var locomotive = require('locomotive'),
 
 function Controller () {
   locomotive.Controller.call(this);
+  this.javascript = '';
 }
 
 util.inherits(Controller, locomotive.Controller);
+
+Controller.prototype.expose = function(value, name) {
+  this.javascript += name + ' = ' + JSON.stringify(this.user) + ';';
+};
 
 Controller.prototype.init = function() {
   this.LOGIN_PATH = this.loginPath();
@@ -14,6 +19,9 @@ Controller.prototype.init = function() {
   this.REDIRECT_PATH = this.redirectPath();
 
   this.user = this.req.user;
+  if (this.user) {
+    this.expose(this.user, 'user');
+  }
 };
 
 Controller.prototype.isLogin = function() {
