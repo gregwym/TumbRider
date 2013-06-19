@@ -9,7 +9,8 @@ module.exports = function(grunt) {
       imagesDir: 'public/images',
       javascriptsDir: 'public/scripts',
       fontsDir: 'public/fonts',
-      foundationDir: 'bower_modules/foundation'
+      foundationDir: 'bower_modules/foundation',
+      appjsDir: 'bower_modules/appjs'
     },
     pkg: grunt.file.readJSON('package.json'),
     compass: {
@@ -34,7 +35,7 @@ module.exports = function(grunt) {
     },
     jshint: {
       // define the files to lint
-      files: ['gruntfile.js', '<%= dirs.appDir %>/**.js'],
+      files: ['gruntfile.js', '<%= dirs.appDir %>/**/*.js'],
       // configure JSHint (documented at http://www.jshint.com/docs/)
       options: {
         // more options here if you want to override JSHint defaults
@@ -69,6 +70,14 @@ module.exports = function(grunt) {
       foundation: {
         files: [
           {expand: true, cwd: '<%= dirs.foundationDir %>/js/vendor/', src: '*.js', dest: '<%= dirs.javascriptsDir %>'}
+        ]
+      },
+      appjs: {
+        files: [
+          {expand: true, cwd: '<%= dirs.appjsDir %>', src: 'app.js', dest: '<%= dirs.javascriptsDir %>',
+           rename: function(dest, src) { return dest + '/appjs.js'; }},
+          {expand: true, cwd: '<%= dirs.appjsDir %>', src: 'default.css', dest: '<%= dirs.cssDir %>',
+           rename: function(dest, src) { return dest + '/appjs.css'; }}
         ]
       }
     },
