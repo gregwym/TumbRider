@@ -19,4 +19,5 @@ bower_modules
 
 credentials.js
 public/**
+build/**
 .sass-cache/**

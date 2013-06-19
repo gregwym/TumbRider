@@ -1,8 +1,8 @@
 {
   "name": "TumbRider",
   "dependencies": {
-    "foundation": "4.x"
+    "foundation": "4.x",
+    "appjs-v1.10.0": "https://raw.github.com/kikinteractive/app/master/appjs-v1.10.0.zip"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

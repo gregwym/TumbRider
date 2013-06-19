@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       javascriptsDir: 'public/scripts',
       fontsDir: 'public/fonts',
       foundationDir: 'bower_modules/foundation',
-      appjsDir: 'bower_modules/appjs'
+      appjsDir: 'bower_modules/appjs-v1.10.0'
     },
     pkg: grunt.file.readJSON('package.json'),
     compass: {
@@ -82,11 +82,11 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      appjs: {
+      js: {
         files: ['<%= dirs.appDir %>/js/*.js'],
         tasks: ['uglify:app']
       },
-      app: {
+      scss: {
         files: ['<%= dirs.appDir %>/scss/*'],
         tasks: ['compass:app']
       }
