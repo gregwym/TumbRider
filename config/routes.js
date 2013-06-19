@@ -19,7 +19,7 @@ module.exports = function routes() {
 
   this.namespace('auth', function() {
     this.get('tumblr', passport.authenticate('tumblr'));
-    this.get('tumblr/callback', passport.authenticate('tumblr', { successRedirect: '/auth/tumblr/status',
+    this.get('tumblr/callback', passport.authenticate('tumblr', { successRedirect: '/redirect',
                                                                   failureRedirect: '/login' }));
     this.get('tumblr/status', 'tumblr#status');
   });
@@ -27,4 +27,7 @@ module.exports = function routes() {
   this.resources('tumblr', function() {
     this.resources('posts');
   });
+
+  // Kik Cards
+  this.match('cards', 'cards#index', { as: 'cards'});
 };

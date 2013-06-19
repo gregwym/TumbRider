@@ -1,0 +1,80 @@
+!!! 5
+html
+	head
+		title TumbRider
+		meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+		link(rel="stylesheet", href="/stylesheets/appjs.css")
+	body
+		.app-page(data-page="login")
+			.app-topbar
+				.app-title TumbRider
+			.app-content
+				.app-section
+					.app-button(data-target="to-tumblr") Login with Tumblr
+		.app-page(data-page="logout")
+			.app-topbar
+				.app-title TumbRider
+			.app-content
+				.app-section
+					.app-input Logout......
+		.app-page(data-page="to-tumblr")
+			.app-topbar
+				.app-title Redirecting to Tumblr
+			.app-content
+				ul.app-list.app-section
+					li If not going anywhere, <a href="/auth/tumblr">click here</a>.
+		.app-page(data-page="dashboard")
+			.app-topbar
+				.app-title TumbRider
+				.app-button.right(data-target="logout") Logout
+			.app-content
+				ul.app-list.app-section
+					li Welcome, <span id="welcome-username"></span>.
+				.app-section(data-target="detail")
+					img(src="http://24.media.tumblr.com/d19ae8eaa1a69f50777ed570e72e5b68/tumblr_moh7nv60AR1qafe19o1_1280.jpg", style="width:100%;")
+		.app-page(data-page="detail")
+			.app-topbar
+				.app-title TumbRider
+				.app-button.right(data-target="logout") Logout
+
+		script(src="/scripts/zepto.js")
+		script(src="/scripts/appjs.js")
+		script!= javascript
+		script.
+			App.populator('to-tumblr', function (page) {
+				$(page).on('appShow', function () {
+					if(typeof user !== 'undefined') {
+						App.load('dashboard');
+					} else {
+						window.location = '/auth/tumblr';
+					}
+				});
+			});
+
+			App.populator('logout', function (page) {
+				$(page).on('appShow', function () {
+					window.location = '#{LOGOUT_PATH}';
+				});
+			});
+
+			App.populator('dashboard', function(page) {
+				if(typeof user !== 'undefined') {
+					$(page).find('#welcome-username').text(user.username);
+				}
+			});
+
+			try {
+				// try to restore previous session
+				if(typeof user !== 'undefined') {
+					App.restore();
+				} else {
+					App.load('login');
+				}
+			}
+			catch (err) {
+				if(typeof user !== 'undefined') {
+					App.load('dashboard');
+				} else {
+					App.load('login');
+				}
+			}
