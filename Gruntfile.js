@@ -102,7 +102,7 @@ module.exports = function(grunt) {
         },
         command: [
           'git add *',
-          'git commit -m "Deploying <%= pkg.name %> v<%= pkg.version %> to Heroku"',
+          'git commit -am "Deploying <%= pkg.name %> v<%= pkg.version %> to Heroku"',
           'git push heroku master -f'
         ].join('&&')
       }

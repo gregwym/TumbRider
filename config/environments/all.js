@@ -8,6 +8,7 @@ var express = require('express'),
 
 var initializeMongoose = function() {
   var mongoUrl = process.env.MONGO_DB_URL || 'mongodb://localhost/mydb';
+  mongoose.disconnect();
   mongoose.connect(mongoUrl);
   console.log("Mongoose initialized.");
 };
