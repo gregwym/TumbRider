@@ -10,13 +10,17 @@ var passport = require('passport');
 module.exports = function routes() {
   this.root('pages#main');
 
-  // Authentication
+  // General
+  this.get('logout', 'pages#logout', { as: 'logout'});
+  this.get('redirect', 'pages#redirectTo', { as: 'redirect'});
+  this.get('sessions', 'pages#sessions');
+
+  // Local Authentication
   this.get('login', 'pages#login', { as: 'login'});
   this.post('login', passport.authenticate('local', { successRedirect: '/redirect',
                                                       failureRedirect: '/login' }));
-  this.get('logout', 'pages#logout', { as: 'logout'});
-  this.get('redirect', 'pages#redirectTo', { as: 'redirect'});
 
+  // Third-party Authentication
   this.namespace('auth', function() {
     this.get('tumblr', passport.authenticate('tumblr'));
     this.get('tumblr/callback', passport.authenticate('tumblr', { successRedirect: '/redirect',
@@ -24,6 +28,7 @@ module.exports = function routes() {
     this.get('tumblr/status', 'tumblr#status');
   });
 
+  // Tumblr API
   this.resources('tumblr', function() {
     this.resources('posts');
   });

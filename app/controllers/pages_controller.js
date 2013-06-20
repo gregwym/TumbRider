@@ -1,4 +1,5 @@
 var Controller = require('../common/base_controller');
+var models = require('../models');
 
 var PagesController = new Controller();
 
@@ -26,6 +27,16 @@ PagesController.redirectTo = function() {
 PagesController.logout = function() {
   this.req.logout();
   this.redirect(this.REDIRECT_PATH);
+};
+
+PagesController.sessions = function() {
+  var self = this;
+  models.sessions.find(function (err, sessions) {
+    if (err) {
+      self.res.status(500).send('Fail to fetch sessions.');
+    }
+    self.res.json(sessions);
+  });
 };
 
 PagesController.before('*', function(next) {
