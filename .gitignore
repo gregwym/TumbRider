@@ -1,3 +1,4 @@
+// General
 lib-cov
 *.seed
 *.log
@@ -12,11 +13,17 @@ logs
 results
 .DS_Store
 
+// Files
 npm-debug.log
+credentials.js
+
+// Directories
 node_modules
 bower_modules
+build
+.c9revisions
 
-credentials.js
+// Directory Contents
 public/**
 build/**
 .sass-cache/**

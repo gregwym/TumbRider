@@ -34,6 +34,9 @@ module.exports = function() {
   // JSON or XML response.
   /* this.format('xml', { engine: 'xmlb' }); */
 
+  // Config Mongoose
+  this.datastore(require('locomotive-mongoose'));
+
   // Use middleware.  Standard [Connect](http://www.senchalabs.org/connect/)
   // middleware is built-in, with additional [third-party](https://github.com/senchalabs/connect/wiki)
   // middleware available as separate modules.
