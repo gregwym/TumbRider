@@ -5,7 +5,7 @@ var locomotive = require('locomotive'),
 var PostsController = new Controller();
 
 PostsController.display = function(blog, offset) {
-  this.loadCredentials();
+  this.loadConfig();
 
   var self = this;
   var api_key = this.credentials.tumblr_consumer_key;

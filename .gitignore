@@ -15,7 +15,7 @@ results
 
 // Files
 npm-debug.log
-credentials.js
+config.js
 
 // Directories
 node_modules

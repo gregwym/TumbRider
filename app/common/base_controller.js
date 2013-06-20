@@ -1,6 +1,6 @@
 var locomotive = require('locomotive'),
     util = require('util'),
-    credentials = require('../../config/credentials.js');
+    config = require('../../config/config.js');
 
 function Controller () {
   locomotive.Controller.call(this);
@@ -36,8 +36,8 @@ Controller.prototype.requireLogin = function() {
   return result;
 };
 
-Controller.prototype.loadCredentials = function() {
-    this.credentials = credentials;
+Controller.prototype.loadConfig = function() {
+    this.config = config;
 };
 
 Controller.prototype.setRedirectUrl = function(url) {

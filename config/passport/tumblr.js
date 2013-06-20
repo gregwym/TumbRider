@@ -1,12 +1,12 @@
 var passport = require('passport'),
     TumblrStrategy = require('passport-tumblr').Strategy,
-    credentials = require('../credentials');
+    config = require('../config');
 
 module.exports = function init () {
   passport.use(new TumblrStrategy({
-      consumerKey: credentials.tumblr_consumer_key,
-      consumerSecret: credentials.tumblr_consumer_secret,
-      callbackURL: 'http://localhost:3000/auth/tumblr/callback'
+      consumerKey: config.tumblr_consumer_key,
+      consumerSecret: config.tumblr_consumer_secret,
+      callbackURL: 'http://' + config.base_domain + '/auth/tumblr/callback'
     },
     function(token, tokenSecret, profile, done) {
       // asynchronous verification, for effect...
