@@ -1,7 +1,16 @@
 var express = require('express'),
     poweredBy = require('connect-powered-by'),
+    MongoStore = require('connect-mongo')(express),
+    mongoose = require('mongoose'),
     passport = require('passport'),
+    config = require('../config'),
     util = require('util');
+
+var initializeMongoose = function() {
+  var mongoUrl = process.env.MONGO_DB_URL || 'mongodb://localhost/mydb';
+  mongoose.connect(mongoUrl);
+  console.log("Mongoose initialized.");
+};
 
 module.exports = function() {
   // Warn of version mismatch between global "lcm" binary and local installation
@@ -36,6 +45,7 @@ module.exports = function() {
 
   // Config Mongoose
   this.datastore(require('locomotive-mongoose'));
+  initializeMongoose();
 
   // Use middleware.  Standard [Connect](http://www.senchalabs.org/connect/)
   // middleware is built-in, with additional [third-party](https://github.com/senchalabs/connect/wiki)
@@ -46,7 +56,12 @@ module.exports = function() {
   this.use(express.static(__dirname + '/../../public'));
   this.use(express.cookieParser());
   this.use(express.bodyParser());
-  this.use(express.session({ secret: 'keyboard cat' }));
+  this.use(express.session({
+    secret: config.session_secret,
+    store: new MongoStore({
+      db: mongoose.connection.db
+    })
+  }));
   this.use(passport.initialize());
   this.use(passport.session());
   this.use(express.methodOverride());
