@@ -4,7 +4,9 @@ module.exports = function(grunt) {
   grunt.initConfig({
     dirs: {
       appDir: 'app',
+      configDir: 'config',
       publicDir: 'public',
+      buildDir: 'build',
       cssDir: 'public/stylesheets',
       imagesDir: 'public/images',
       javascriptsDir: 'public/scripts',
@@ -79,6 +81,30 @@ module.exports = function(grunt) {
           {expand: true, cwd: '<%= dirs.appjsDir %>', src: 'default.css', dest: '<%= dirs.cssDir %>',
            rename: function(dest, src) { return dest + '/appjs.css'; }}
         ]
+      },
+      heroku: {
+        files: [
+          {expand: true, src: ['<%= dirs.appDir %>/**', '<%= dirs.configDir %>/**',
+                               '<%= dirs.publicDir %>/**', 'package.json', 'Procfile'],
+           dest: '<%= dirs.buildDir %>'}
+        ]
+      }
+    },
+    shell: {
+      heroku: {
+        options: {
+          stdout: true,
+          stderr: true,
+          failOnError: true,
+          execOptions: {
+            cwd: '<%= dirs.buildDir %>'
+          }
+        },
+        command: [
+          'git add *',
+          'git commit -m "Deploying <%= pkg.name %> v<%= pkg.version %> to Heroku"',
+          'git push heroku master -f'
+        ].join('&&')
       }
     },
     watch: {
@@ -98,9 +124,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task(s).
-  grunt.registerTask('default', ['compass', 'jshint', 'uglify', 'copy']);
+  grunt.registerTask('default', ['compass', 'jshint', 'uglify', 'copy:foundation', 'copy:appjs']);
+  grunt.registerTask('heroku', ['default', 'copy:heroku', 'shell:heroku']);
 };
