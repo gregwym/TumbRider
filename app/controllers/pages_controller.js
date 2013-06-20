@@ -39,6 +39,16 @@ PagesController.sessions = function() {
   });
 };
 
+PagesController.users = function() {
+  var self = this;
+  models.users.find(function (err, users) {
+    if (err) {
+      self.res.status(500).send('Fail to fetch users.');
+    }
+    self.res.json(users);
+  });
+};
+
 PagesController.before('*', function(next) {
   this.init();
   return next();

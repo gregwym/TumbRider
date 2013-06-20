@@ -13,7 +13,6 @@ module.exports = function routes() {
   // General
   this.get('logout', 'pages#logout', { as: 'logout'});
   this.get('redirect', 'pages#redirectTo', { as: 'redirect'});
-  this.get('sessions', 'pages#sessions');
 
   // Local Authentication
   this.get('login', 'pages#login', { as: 'login'});
@@ -27,6 +26,10 @@ module.exports = function routes() {
                                                                   failureRedirect: '/login' }));
     this.get('tumblr/status', 'tumblr#status');
   });
+
+  // DB Inspection
+  this.get('sessions', 'pages#sessions');
+  this.get('users', 'pages#users');
 
   // Tumblr API
   this.resources('tumblr', function() {

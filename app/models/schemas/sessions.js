@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 
-exports = mongoose.Schema({
-  _id: String,
+var sessions = mongoose.Schema({
   session: String,
   expires: Date
 });
+
+module.exports = sessions;

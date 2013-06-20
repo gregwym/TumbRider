@@ -8,7 +8,7 @@ PostsController.display = function(blog, offset) {
   this.loadConfig();
 
   var self = this;
-  var api_key = this.credentials.tumblr_consumer_key;
+  var api_key = this.config.tumblr_consumer_key;
   var url = 'http://api.tumblr.com/v2/blog/' + blog + '/posts/photo?api_key=' + api_key;
   if (typeof offset !== 'undefined') {
     url += '&offset=' + offset;
