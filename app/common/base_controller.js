@@ -1,6 +1,6 @@
 var locomotive = require('locomotive'),
     util = require('util'),
-    config = require('../../config/config.js');
+    config = global.app.config;
 
 function Controller () {
   locomotive.Controller.call(this);

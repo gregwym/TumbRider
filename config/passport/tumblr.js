@@ -1,7 +1,7 @@
 var passport = require('passport'),
     TumblrStrategy = require('passport-tumblr').Strategy,
     models = require('../../app/models'),
-    config = require('../config');
+    config = global.app.config;
 
 module.exports = function init () {
   passport.use(new TumblrStrategy({

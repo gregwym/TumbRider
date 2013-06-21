@@ -3,7 +3,6 @@ var express = require('express'),
     MongoStore = require('connect-mongo')(express),
     mongoose = require('mongoose'),
     passport = require('passport'),
-    config = require('../config'),
     util = require('util');
 
 var initializeMongoose = function() {
@@ -19,6 +18,12 @@ module.exports = function() {
   if (this.version !== require('locomotive').version) {
     console.warn(util.format('version mismatch between local (%s) and global (%s) Locomotive module', require('locomotive').version, this.version));
   }
+
+  // Load global app configs
+  var config = require('../config.' + this.get('env') + '');
+  global.app = {
+    config: config
+  };
 
   // Configure application settings.  Consult the Express API Reference for a
   // list of the available [settings](http://expressjs.com/api.html#app-settings).
