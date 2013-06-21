@@ -1,4 +1,5 @@
 var passport = require('passport');
+var models = require('../../app/models');
 var useLocalStrategy = require('../passport/local');
 var useTumblrStrategy = require('../passport/tumblr');
 
@@ -9,11 +10,22 @@ module.exports = function() {
   //   this will be as simple as storing the user ID when serializing, and finding
   //   the user by ID when deserializing.
   passport.serializeUser(function(user, done) {
-    done(null, user);
+    return done(null, user._id);
   });
 
-  passport.deserializeUser(function(obj, done) {
-    done(null, obj);
+  passport.deserializeUser(function(id, done) {
+    // Find the user in db
+    models.users.findOne({ '_id': id }, function(err, user) {
+      if(err) {
+        return done(err);
+      }
+
+      if (user) {
+        return done(null, user);
+      } else {
+        return done(new Error('Invalid user id'));
+      }
+    });
   });
 
   useLocalStrategy();
