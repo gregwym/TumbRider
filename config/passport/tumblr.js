@@ -1,5 +1,6 @@
 var passport = require('passport'),
     TumblrStrategy = require('passport-tumblr').Strategy,
+    models = require('../../app/models'),
     config = require('../config');
 
 module.exports = function init () {
@@ -11,11 +12,29 @@ module.exports = function init () {
     function(token, tokenSecret, profile, done) {
       // asynchronous verification, for effect...
       process.nextTick(function () {
-        // To keep the example simple, the user's Tumblr profile is returned to
-        // represent the logged-in user.  In a typical application, you would want
-        // to associate the Tumblr account with a user record in your database,
-        // and return that user instead.
-        return done(null, profile);
+        models.users.findOne({ 'tumblr.name': profile.username }, function(err, user) {
+          if(err) {
+            return done(err, null);
+          }
+
+          // Determin whether is an existing user, then update or create it.
+          if (user) {
+            user.tumblr.token = token;
+            user.tumblr.tokenSecret = tokenSecret;
+          } else {
+            user = new models.users({
+              'tumblr.name': profile.username,
+              'tumblr.token': token,
+              'tumblr.tokenSecret': tokenSecret
+            });
+          }
+
+          // Save the user
+          user.save(function(err, user) {
+              if (err) { return done(err, null); }
+              return done(null, user);
+            });
+        });
       });
     }
   ));

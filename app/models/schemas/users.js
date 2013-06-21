@@ -2,14 +2,14 @@ var mongoose = require('mongoose');
 
 var users = mongoose.Schema({
   tumblr: {
-    username: String,
+    name: String,
     token: String,
     tokenSecret: String
   }
 });
 
 users.virtual('displayName').get(function() {
-  return this.tumblr.username;
+  return this.tumblr.name;
 });
 
 module.exports = users;
