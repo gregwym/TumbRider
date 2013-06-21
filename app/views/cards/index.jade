@@ -59,7 +59,7 @@ html
 
 			App.populator('dashboard', function(page) {
 				if(typeof user !== 'undefined') {
-					$(page).find('#welcome-username').text(user.username);
+					$(page).find('#welcome-username').text(user.tumblr.name);
 				}
 			});
 
