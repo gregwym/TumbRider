@@ -1,40 +1,35 @@
 var locomotive = require('locomotive'),
     Controller = require('../common/base_controller'),
-    request = require('request');
+    Tumblr = require('tumblr').Tumblr;
 
 var PostsController = new Controller();
 
-PostsController.display = function(blog, offset) {
-  this.loadConfig();
-
+PostsController.display = function(blogHostname, offset) {
   var self = this;
-  var api_key = this.config.tumblr_consumer_key;
-  var url = 'http://api.tumblr.com/v2/blog/' + blog + '/posts/photo?api_key=' + api_key;
-  if (typeof offset !== 'undefined') {
-    url += '&offset=' + offset;
-  }
+  self.title = '"' + blogHostname + '" Posts';
 
-  self.title = '"' + blog + '" Posts';
+  var config = global.app.config;
+  var blog = new Tumblr(blogHostname, config.tumblr_consumer_key);
 
-  var renderOutput = function(body) {
-    self.posts = body.response.posts;
+  blog.photo( { offset: offset }, function(err, response) {
+    if(err) {
+      return renderError(err);
+    }
+    return renderOutput(response);
+  });
+
+  var renderOutput = function(response) {
+    self.posts = response.posts;
     self.respond({
       'html': { template: 'grid' },
-      'json': function() { self.res.json(body); }
+      'json': function() { self.res.json(response); }
     });
   };
 
-  var renderError = function(error, response) {
-    self.res.status(response.statusCode).send('Fail to fetch ' + url + ' from tumblr: ' + response.statusCode);
+  var renderError = function(err) {
+    self.res.status(response.statusCode)
+        .send('Fail to fetch ' + blogHostname + ' from tumblr: ' + err);
   };
-
-  request.get({url: url, json: true}, function(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      renderOutput(body);
-    } else {
-      renderError(error, response);
-    }
-  });
 };
 
 PostsController.index = function() {
