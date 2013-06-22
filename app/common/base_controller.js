@@ -10,7 +10,7 @@ function Controller () {
 util.inherits(Controller, locomotive.Controller);
 
 Controller.prototype.expose = function(value, name) {
-  this.javascript += name + ' = ' + JSON.stringify(this.user) + ';';
+  this.javascript += name + ' = ' + JSON.stringify(value) + ';';
 };
 
 Controller.prototype.init = function() {
