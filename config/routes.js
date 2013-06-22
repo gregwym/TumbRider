@@ -32,8 +32,12 @@ module.exports = function routes() {
   this.get('users', 'pages#users');
 
   // Tumblr API
-  this.resources('tumblr', function() {
-    this.resources('posts');
+  this.namespace('tumblr', function() {
+    this.resources('blogs', function() {
+      this.resources('posts');
+    });
+    this.get('user/info', 'user#info');
+    this.get('user/dashboard', 'user#dashboard');
   });
 
   // Kik Cards
