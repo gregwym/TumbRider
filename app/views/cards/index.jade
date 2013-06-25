@@ -4,6 +4,7 @@ html
 		title TumbRider
 		meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
 		link(rel="stylesheet", href="/stylesheets/appjs.css")
+		link(rel="stylesheet", href="/stylesheets/tumbrider.css")
 	body
 		.app-page(data-page="login")
 			.app-topbar
@@ -25,56 +26,41 @@ html
 					li If not going anywhere, <a href="/auth/tumblr">click here</a>.
 		.app-page(data-page="dashboard")
 			.app-topbar
+				.app-button.left(data-target="logout") Logout
 				.app-title TumbRider
-				.app-button.right(data-target="logout") Logout
 			.app-content
 				ul.app-list.app-section
 					li Welcome, <span id="welcome-username"></span>.
-				.app-section(data-target="detail")
-					img(src="http://24.media.tumblr.com/d19ae8eaa1a69f50777ed570e72e5b68/tumblr_moh7nv60AR1qafe19o1_1280.jpg", style="width:100%;")
 		.app-page(data-page="detail")
 			.app-topbar
+				.app-button.left(data-back="true") Back
 				.app-title TumbRider
-				.app-button.right(data-target="logout") Logout
+				.app-button.right Kik
+			.app-content
+				ul.app-list
+					li.tumb-image: img(src="http://24.media.tumblr.com/d19ae8eaa1a69f50777ed570e72e5b68/tumblr_moh7nv60AR1qafe19o1_1280.jpg", style="width:100%;")
+					label Actions
+					li: .app-button Like
+					li: .app-button Reblog
+					li: .app-button Bookmark
+		// Underscore Templates
+		script(type="text/html", id="photos-block").
+			<ul class="app-section">
+				<%
+					console.log(photos);
+					_.each(photos, function(photo, key, list) {
+						console.log(photo);
+						var photo_url = photo.original_size.url;
+				%>
+					<li class="app-button tumb-image" data-target="detail">
+						<img src="<%= photo_url %>", style="width:100%;" />
+					</li>
+				<% }); %>
 
+			</ul>
+		// JavaScripts
+		script!= javascript
 		script(src="/scripts/zepto.js")
 		script(src="/scripts/appjs.js")
-		script!= javascript
-		script.
-			App.populator('to-tumblr', function (page) {
-				$(page).on('appShow', function () {
-					if(typeof user !== 'undefined') {
-						App.load('dashboard');
-					} else {
-						window.location = '/auth/tumblr';
-					}
-				});
-			});
-
-			App.populator('logout', function (page) {
-				$(page).on('appShow', function () {
-					window.location = '#{LOGOUT_PATH}';
-				});
-			});
-
-			App.populator('dashboard', function(page) {
-				if(typeof user !== 'undefined') {
-					$(page).find('#welcome-username').text(user.tumblr.name);
-				}
-			});
-
-			try {
-				// try to restore previous session
-				if(typeof user !== 'undefined') {
-					App.restore();
-				} else {
-					App.load('login');
-				}
-			}
-			catch (err) {
-				if(typeof user !== 'undefined') {
-					App.load('dashboard');
-				} else {
-					App.load('login');
-				}
-			}
+		script(src="/scripts/underscore.js")
+		script(src="/scripts/tumbrider.js")
