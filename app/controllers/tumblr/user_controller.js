@@ -6,10 +6,13 @@ var PagesController = new Controller();
 PagesController.info = function() {
   var self = this;
   var config = global.app.config;
-  var user = new User(config.tumblr_consumer_key,
-                      config.tumblr_consumer_secret,
-                      self.user.tumblr.token,
-                      self.user.tumblr.tokenSecret);
+  var oauth = {
+    consumer_key: config.tumblr_consumer_key,
+    consumer_secret: config.tumblr_consumer_secret,
+    token: self.user.tumblr.token,
+    token_secret: self.user.tumblr.tokenSecret
+  };
+  var user = new User(oauth);
 
   user.info(function(err, response) {
     if (err) {
@@ -22,10 +25,13 @@ PagesController.info = function() {
 PagesController.dashboard = function() {
   var self = this;
   var config = global.app.config;
-  var user = new User(config.tumblr_consumer_key,
-                      config.tumblr_consumer_secret,
-                      self.user.tumblr.token,
-                      self.user.tumblr.tokenSecret);
+  var oauth = {
+    consumer_key: config.tumblr_consumer_key,
+    consumer_secret: config.tumblr_consumer_secret,
+    token: self.user.tumblr.token,
+    token_secret: self.user.tumblr.tokenSecret
+  };
+  var user = new User(oauth);
 
   user.dashboard(this.req.query, function(err, response) {
     if (err) {
@@ -37,7 +43,6 @@ PagesController.dashboard = function() {
 
 PagesController.before('*', function(next) {
   this.init();
-  this.setRedirectUrl();
   return next();
 });
 

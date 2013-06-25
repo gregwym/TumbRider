@@ -9,7 +9,7 @@ PostsController.display = function(blogHostname, offset) {
   self.title = '"' + blogHostname + '" Posts';
 
   var config = global.app.config;
-  var blog = new Blog(blogHostname, config.tumblr_consumer_key);
+  var blog = new Blog(blogHostname, { consumer_key: config.tumblr_consumer_key });
 
   var posts = null, avatar = null;
 
@@ -42,7 +42,7 @@ PostsController.display = function(blogHostname, offset) {
   };
 
   var renderError = function(err) {
-    self.res.status(404)
+    self.res.status(500)
         .send('Fail to fetch ' + blogHostname + ' from tumblr: ' + err);
   };
 };
