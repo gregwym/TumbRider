@@ -94,7 +94,18 @@ module.exports = function(grunt) {
       }
     },
     shell: {
-      heroku: {
+      heroku_clean: {
+        options: {
+          stdout: true,
+          stderr: true,
+          failOnError: true,
+          execOptions: {
+            cwd: '<%= dirs.buildDir %>'
+          }
+        },
+        command: 'rm -rf *'
+      },
+      heroku_push: {
         options: {
           stdout: true,
           stderr: true,
@@ -133,5 +144,5 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['compass', 'jshint', 'uglify', 'copy:vendor', 'copy:appjs']);
-  grunt.registerTask('heroku', ['default', 'copy:heroku', 'shell:heroku']);
+  grunt.registerTask('heroku', ['default', 'shell:heroku_clean', 'copy:heroku', 'shell:heroku_push']);
 };
