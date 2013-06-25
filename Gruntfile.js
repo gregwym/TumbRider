@@ -12,7 +12,8 @@ module.exports = function(grunt) {
       javascriptsDir: 'public/scripts',
       fontsDir: 'public/fonts',
       foundationDir: 'bower_modules/foundation',
-      appjsDir: 'bower_modules/appjs-v1.10.0'
+      appjsDir: 'bower_modules/appjs-v1.10.0',
+      underscoreDir: 'bower_modules/underscore'
     },
     pkg: grunt.file.readJSON('package.json'),
     compass: {
@@ -55,11 +56,13 @@ module.exports = function(grunt) {
         compress: false,
         beautify: true
       },
-      foundation: {
+      vendor: {
         files: {
           '<%= dirs.javascriptsDir %>/foundation.js':
             ['<%= dirs.foundationDir %>/js/foundation/foundation.js',
-             '<%= dirs.foundationDir %>/js/foundation/foundation.*.js']
+             '<%= dirs.foundationDir %>/js/foundation/foundation.*.js'],
+          '<%= dirs.javascriptsDir %>/underscore.js':
+            ['<%= dirs.underscoreDir %>/underscore.js']
         }
       },
       app: {
@@ -69,7 +72,7 @@ module.exports = function(grunt) {
       }
     },
     copy: {
-      foundation: {
+      vendor: {
         files: [
           {expand: true, cwd: '<%= dirs.foundationDir %>/js/vendor/', src: '*.js', dest: '<%= dirs.javascriptsDir %>'}
         ]
@@ -129,6 +132,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task(s).
-  grunt.registerTask('default', ['compass', 'jshint', 'uglify', 'copy:foundation', 'copy:appjs']);
+  grunt.registerTask('default', ['compass', 'jshint', 'uglify', 'copy:vendor', 'copy:appjs']);
   grunt.registerTask('heroku', ['default', 'copy:heroku', 'shell:heroku']);
 };
