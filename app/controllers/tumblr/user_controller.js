@@ -27,7 +27,7 @@ PagesController.dashboard = function() {
                       self.user.tumblr.token,
                       self.user.tumblr.tokenSecret);
 
-  user.dashboard(function(err, response) {
+  user.dashboard(this.req.query, function(err, response) {
     if (err) {
       return self.res.status(500).send(err);
     }
