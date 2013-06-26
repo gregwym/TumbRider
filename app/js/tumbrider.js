@@ -66,7 +66,7 @@
   }, function(page, args) {
     $(page).find('.tumb-post').unbind();
     $(page).find('.tumb-page-next').unbind();
-    console.log('Dashboard page #' + pageNum + ' destructed');
+    console.log('Dashboard page #' + args.pageNum + ' destructed');
   });
 
   // try to restore previous session
