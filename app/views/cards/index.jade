@@ -31,6 +31,10 @@ html
 			.app-content
 				ul.app-list.app-section
 					li Welcome, <span id="welcome-username"></span>.
+				.tumb-content
+				ul.tumb-pagination.app-section
+					li.app-button.tumb-page-prev(data-back="true") Previous
+					li.app-button.tumb-page-next Next
 		.app-page(data-page="detail")
 			.app-topbar
 				.app-button.left(data-back="true") Back
@@ -40,23 +44,20 @@ html
 				ul.app-list
 					li.tumb-image: img(src="http://24.media.tumblr.com/d19ae8eaa1a69f50777ed570e72e5b68/tumblr_moh7nv60AR1qafe19o1_1280.jpg", style="width:100%;")
 					label Actions
-					li: .app-button Like
-					li: .app-button Reblog
-					li: .app-button Bookmark
+					li.app-button Like
+					li.app-button Reblog
+					li.app-button Bookmark
 		// Underscore Templates
 		script(type="text/html", id="photos-block").
-			<ul class="app-section">
+			<ul class="app-section tumb-post" data-post-id="<%= id %>">
 				<%
-					console.log(photos);
 					_.each(photos, function(photo, key, list) {
-						console.log(photo);
 						var photo_url = photo.original_size.url;
 				%>
-					<li class="app-button tumb-image" data-target="detail">
-						<img src="<%= photo_url %>", style="width:100%;" />
+					<li class="app-button tumb-image">
+						<img src="<%= photo_url %>" style="width:100%;" />
 					</li>
 				<% }); %>
-
 			</ul>
 		// JavaScripts
 		script!= javascript

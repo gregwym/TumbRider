@@ -98,12 +98,26 @@ module.exports = function(grunt) {
         options: {
           stdout: true,
           stderr: true,
-          failOnError: true,
+          failOnError: false,
           execOptions: {
             cwd: '<%= dirs.buildDir %>'
           }
         },
         command: 'rm -rf *'
+      },
+      heroku_commit: {
+        options: {
+          stdout: true,
+          stderr: true,
+          failOnError: false,
+          execOptions: {
+            cwd: '<%= dirs.buildDir %>'
+          }
+        },
+        command: [
+          'git add *',
+          'git commit -am "Deploying <%= pkg.name %> v<%= pkg.version %> to Heroku"'
+        ].join('&&')
       },
       heroku_push: {
         options: {
@@ -114,11 +128,7 @@ module.exports = function(grunt) {
             cwd: '<%= dirs.buildDir %>'
           }
         },
-        command: [
-          'git add *',
-          'git commit -am "Deploying <%= pkg.name %> v<%= pkg.version %> to Heroku"',
-          'git push heroku master -f'
-        ].join('&&')
+        command: 'git push heroku master -f'
       }
     },
     watch: {
@@ -144,5 +154,5 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['compass', 'jshint', 'uglify', 'copy:vendor', 'copy:appjs']);
-  grunt.registerTask('heroku', ['default', 'shell:heroku_clean', 'copy:heroku', 'shell:heroku_push']);
+  grunt.registerTask('heroku', ['default', 'shell:heroku_clean', 'copy:heroku', 'shell:heroku_commit', 'shell:heroku_push']);
 };
