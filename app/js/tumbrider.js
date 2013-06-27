@@ -21,7 +21,7 @@
     }
 
     var template = $('#photos-block').html();
-    var pageSize = 10,
+    var pageSize = 5,
         pageNum = args.pageNum;
     if (!args.pageNum) {
       pageNum = 0;
@@ -34,7 +34,7 @@
       url: '/tumblr/user/dashboard',
       dataType: 'json',
       async: true,
-      data: { limit: pageSize, offset: pageSize * pageNum },
+      data: { limit: pageSize, type: 'photo', offset: pageSize * pageNum },
       success: function(data) {
         constructPosts(data.posts);
       }
