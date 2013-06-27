@@ -3,8 +3,12 @@ html
 	head
 		title TumbRider
 		meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+		meta(name="description", content="Browse and share your tumblr images.")
+		meta(name="kik-prefer", content="true")
+		meta(name="kik-more", content="tumbrider.dolast.com")
 		link(rel="stylesheet", href="/stylesheets/appjs.css")
 		link(rel="stylesheet", href="/stylesheets/tumbrider.css")
+		script(src="http://cdn.kik.com/cards/0/cards.js")
 	body
 		.app-page(data-page="login")
 			.app-topbar
@@ -42,7 +46,7 @@ html
 			.app-topbar
 				.app-button.left(data-back="true") Back
 				.app-title TumbRider
-				.app-button.right Kik
+				.app-button.right.tumb-kik-share Kik
 			.app-content
 				ul.app-list.tumb-images
 					//- label Actions
@@ -66,7 +70,8 @@ html
 		script.
 			// Clean up the session restore stack
 			(function() {
-				var cardStacks = JSON.parse(localStorage.getItem('__APP_JS_STACK__/cards'));
+				var itemName = '__APP_JS_STACK__' + window.location.pathname;
+				var cardStacks = JSON.parse(localStorage.getItem(itemName));
 				var i = 0;
 				for(i = cardStacks.length - 1; i >= 0; i--) {
 					if (cardStacks[i][0] === 'dashboard' && !cardStacks[i][1].pageNum) {
@@ -74,7 +79,7 @@ html
 					}
 				}
 				cardStacks = cardStacks.slice(i, cardStacks.length);
-				localStorage.setItem('__APP_JS_STACK__/cards', JSON.stringify(cardStacks));
+				localStorage.setItem(itemName, JSON.stringify(cardStacks));
 			}).call();
 		script(src="/scripts/zepto.js")
 		script(src="/scripts/appjs.js")

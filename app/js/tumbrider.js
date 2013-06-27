@@ -85,9 +85,24 @@
   });
 
   App.populator('detail', function(page, args) {
+    var post = args.post;
+    var pic = null;
+    if (!post) { return; }
+
     var template = $('#detail-image').html();
-    $.each(args.post.photos.slice().reverse(), function(key, photo) {
+    $.each(post.photos.slice().reverse(), function(key, photo) {
       $(page).find('.tumb-images').prepend(_.template(template, photo));
+      pic = photo.original_size.url;
+    });
+
+    $('.tumb-kik-share').on('click', function(event) {
+      cards.kik.send({
+        title: 'Tumblr Image',
+        text: post.caption,
+        pic: pic,
+        big: true,
+        data: post
+      });
     });
   });
 
