@@ -35,21 +35,19 @@ html
 				ul.tumb-pagination.app-section
 					li.app-button.tumb-page-prev(data-back="true") Previous
 					li.app-button.tumb-page-next Next
+					li.app-button.tumb-page-back First Page
 		.app-page(data-page="detail")
 			.app-topbar
 				.app-button.left(data-back="true") Back
 				.app-title TumbRider
 				.app-button.right Kik
 			.app-content
-				ul.app-list
-					li.tumb-image: img(src="http://24.media.tumblr.com/d19ae8eaa1a69f50777ed570e72e5b68/tumblr_moh7nv60AR1qafe19o1_1280.jpg", style="width:100%;")
+				ul.app-list.tumb-images
 					label Actions
-					li.app-button Like
-					li.app-button Reblog
 					li.app-button Bookmark
 		// Underscore Templates
 		script(type="text/html", id="photos-block").
-			<ul class="app-section tumb-post" data-post-id="<%= id %>">
+			<ul class="app-section tumb-post" data-post-id="<%= id %>" data-post-index="<%= index %>">
 				<%
 					_.each(photos, function(photo, key, list) {
 						var photo_url = photo.original_size.url;
@@ -59,6 +57,8 @@ html
 					</li>
 				<% }); %>
 			</ul>
+		script(type="text/html", id="detail-image").
+			<li class="tumb-image"><img src="<%= original_size.url %>" style="width:100%;"></li>
 		// JavaScripts
 		script!= javascript
 		script(src="/scripts/zepto.js")
