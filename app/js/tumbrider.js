@@ -64,7 +64,7 @@
         });
       }
 
-      if(pageNum < 25) {
+      if(pageNum < (250 / pageSize)) {
         $(page).find('.tumb-page-next').on('click', function(event) {
           App.load('dashboard', {pageNum:pageNum + 1}, 'fade');
         });
