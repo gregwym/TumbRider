@@ -90,17 +90,6 @@
   // try to restore previous session
   if(typeof user !== 'undefined') {
     try {
-      var cardStacks = JSON.parse(localStorage.get('__APP_JS_STACK__/cards'));
-      var i = 0;
-      for(i = cardStacks.length - 1; i >= 0; i--) {
-        if (cardStacks[i][0] === 'dashboard' && !cardStacks[i][1].pageNum) {
-          break;
-        }
-      }
-      cardStacks = cardStacks.slice(i, cardStacks.length);
-      localStorage.set('__APP_JS_STACK__/cards', JSON.stringify(cardStacks));
-      console.log(localStorage.get('__APP_JS_STACK__/cards'));
-
       App.restore();
     } catch (err) {
       console.log('Failed to restore previous session. ');
