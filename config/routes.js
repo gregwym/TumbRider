@@ -8,7 +8,7 @@
 var passport = require('passport');
 
 module.exports = function routes() {
-  this.root('pages#main');
+  this.root('cards#index');
 
   // General
   this.get('logout', 'pages#logout', { as: 'logout'});
