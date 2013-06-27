@@ -27,51 +27,56 @@
       pageNum = 0;
     }
     console.log('Loading dashboard, page: ' + pageNum);
+    $(page).find('.tumb-body').css('display', 'none');
 
     // Construct post DOMs
-    var posts = [];
     $.ajax({
       url: '/tumblr/user/dashboard',
       dataType: 'json',
-      async: false,
+      async: true,
       data: { limit: pageSize, offset: pageSize * pageNum },
       success: function(data) {
-        posts = data.posts;
+        constructPosts(data.posts);
       }
     });
 
-    $.each(posts, function(key, post) {
-      post.index = key;
-      if (post.photos) {
-        $(page).find('.tumb-content').append(_.template(template, post));
+    var constructPosts = function(posts) {
+      $.each(posts, function(key, post) {
+        post.index = key;
+        if (post.photos) {
+          $(page).find('.tumb-content').append(_.template(template, post));
+        }
+      });
+
+      // Setup post actions
+      $(page).find('.tumb-post').on('click', function(event) {
+        var postIndex = $(this).attr('data-post-index');
+        App.load('detail', {post:posts[postIndex]});
+      });
+
+      // Setup pagination actions
+      if(pageNum < 1) {
+        $(page).find('.tumb-page-prev').css('display', 'none');
+        $(page).find('.tumb-page-back').css('display', 'none');
+      } else {
+        $(page).find('.tumb-page-back').on('click', function(event) {
+          App.load('dashboard', 'fade');
+        });
       }
-    });
 
-    // Setup post actions
-    $(page).find('.tumb-post').on('click', function(event) {
-      var postIndex = $(this).attr('data-post-index');
-      App.load('detail', {post:posts[postIndex]});
-    });
+      if(pageNum < 25) {
+        $(page).find('.tumb-page-next').on('click', function(event) {
+          App.load('dashboard', {pageNum:pageNum + 1}, 'fade');
+        });
+      } else {
+        $(page).find('.tumb-page-next').css('display', 'none');
+      }
 
-    // Setup pagination actions
-    if(pageNum < 1) {
-      $(page).find('.tumb-page-prev').css('display', 'none');
-      $(page).find('.tumb-page-back').css('display', 'none');
-    } else {
-      $(page).find('.tumb-page-back').on('click', function(event) {
-        App.load('dashboard', 'fade');
-      });
-    }
+      $(page).find('.tumb-body').css('display', '');
+      $(page).find('.tumb-loader').css('display', 'none');
 
-    if(pageNum < 25) {
-      $(page).find('.tumb-page-next').on('click', function(event) {
-        App.load('dashboard', {pageNum:pageNum + 1}, 'fade');
-      });
-    } else {
-      $(page).find('.tumb-page-next').css('display', 'none');
-    }
-
-    console.log('Dashboard page #' + pageNum + ' load completed.');
+      console.log('Dashboard page #' + pageNum + ' load completed.');
+    };
   }, function(page, args) {
     $(page).find('.tumb-post').unbind();
     $(page).find('.tumb-page-next').unbind();
@@ -82,7 +87,6 @@
   App.populator('detail', function(page, args) {
     var template = $('#detail-image').html();
     $.each(args.post.photos.slice().reverse(), function(key, photo) {
-      console.log(photo);
       $(page).find('.tumb-images').prepend(_.template(template, photo));
     });
   });

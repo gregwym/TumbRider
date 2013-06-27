@@ -29,13 +29,15 @@ html
 				.app-button.left(data-target="logout") Logout
 				.app-title TumbRider
 			.app-content
-				ul.app-list.app-section
-					li Welcome, <span id="welcome-username"></span>.
-				.tumb-content
-				ul.tumb-pagination.app-section
-					li.app-button.tumb-page-prev(data-back="true") Previous
-					li.app-button.tumb-page-next Next
-					li.app-button.tumb-page-back First Page
+				.tumb-body
+					ul.app-list.app-section
+						li Welcome, <span id="welcome-username"></span>.
+					.tumb-content
+					ul.tumb-pagination.app-section
+						li.app-button.tumb-page-prev(data-back="true") Previous
+						li.app-button.tumb-page-next Next
+						li.app-button.tumb-page-back Back to First Page
+				.tumb-loader
 		.app-page(data-page="detail")
 			.app-topbar
 				.app-button.left(data-back="true") Back
@@ -43,8 +45,8 @@ html
 				.app-button.right Kik
 			.app-content
 				ul.app-list.tumb-images
-					label Actions
-					li.app-button Bookmark
+					//- label Actions
+					//- li.app-button Bookmark
 		// Underscore Templates
 		script(type="text/html", id="photos-block").
 			<ul class="app-section tumb-post" data-post-id="<%= id %>" data-post-index="<%= index %>">
