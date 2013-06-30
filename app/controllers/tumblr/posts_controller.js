@@ -11,30 +11,17 @@ PostsController.display = function(blogHostname, offset) {
   var config = global.app.config;
   var blog = new Blog(blogHostname, { consumer_key: config.tumblr_consumer_key });
 
-  var posts = null, avatar = null;
-
   blog.photo( { offset: offset }, function(err, response) {
     if(err) {
       return renderError(err);
     }
     posts = response.posts;
-    return renderOutput();
-  });
-
-  blog.avatar(function(err, response) {
-    if (err) {
-      return renderError(err);
-    }
-    avatar = response.avatar_url;
-    return renderOutput();
+    return renderOutput(response);
   });
 
   var renderOutput = function(response) {
-    if (!posts || !avatar) {
-      return;
-    }
-    self.posts = posts;
-    self.avatar = avatar;
+    self.posts = response.posts;
+
     self.respond({
       'html': { template: 'grid' },
       'json': function() { self.res.json(response); }

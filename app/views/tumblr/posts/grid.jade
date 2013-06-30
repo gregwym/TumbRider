@@ -1,8 +1,6 @@
 extends ../../layout
 
 block container
-	.panel
-		img(src="#{avatar}")
 	each post in posts
 		a(href="#{post.image_permalink}")
 			.panel.post
