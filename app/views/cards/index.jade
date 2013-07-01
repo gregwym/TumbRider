@@ -14,12 +14,13 @@ html
 			.app-topbar
 				.app-title TumbRider
 			.app-content
-				//- .app-section
-				//- 	input.app-input(type="text", placeholder="Seach on Tumblr")
-				//- 	.app-button Search
-				.app-section
-					input.app-input.tumb-blog-search-url(type="text", placeholder="Blog URL (i.e., staff.tumblr.com)")
-					.app-button.tumb-blog-search-submit Go
+				ul.app-list
+					label Search a Tag
+					form.tumb-search-tag
+						input.app-input(type="text", placeholder="Seach on Tumblr")
+					label Browse a Blog
+					form.tumb-browse-blog
+						input.app-input(type="url", placeholder="Blog URL (i.e., staff.tumblr.com)")
 		.app-page(data-page="result")
 			.app-topbar
 				.app-button.left(data-back="true") Back

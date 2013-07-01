@@ -24,10 +24,15 @@
   /* Populators */
   // Home Page
   App.populator('home', function(page, args) {
-    $(page).find('.tumb-blog-search-submit').on('click', function(event) {
-      var blogUrl = $(page).find('.tumb-blog-search-url').val();
-      console.log('Blog URL: ' + blogUrl);
+    $(page).find('.tumb-browse-blog').submit(function(event) {
+      var blogUrl = $(this).find('input:first').val();
+      if (!blogUrl) {
+        alert('Please enter a blog name');
+        return false;
+      }
+      console.log('Browsing Blog URL: ' + blogUrl);
       App.load('result', { searchType:'blogs', blogUrl:blogUrl });
+      return false;
     });
   });
 
