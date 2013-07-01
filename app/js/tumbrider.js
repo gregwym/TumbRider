@@ -1,89 +1,72 @@
 (function() {
-  App.populator('to-tumblr', function (page) {
-    $(page).on('appShow', function () {
-      if(typeof user !== 'undefined') {
-        App.load('dashboard');
-      } else {
-        window.location = '/auth/tumblr';
+  /* Helpers */
+  var constructPosts = function(page, posts) {
+    var template = $('#post-images').html();
+    $.each(posts, function(key, post) {
+      post.index = key;
+      if (post.photos) {
+        $(page).find('.tumb-content').append(_.template(template, post));
       }
     });
-  });
 
-  App.populator('logout', function (page) {
-    $(page).on('appShow', function () {
-      window.location = '/logout';
+    // Setup post actions
+    $(page).find('.tumb-post').on('click', function(event) {
+      var postIndex = $(this).attr('data-post-index');
+      App.load('detail', {post:posts[postIndex]});
+    });
+
+    $(page).find('.tumb-body').css('display', '');
+    $(page).find('.tumb-loader').css('display', 'none');
+
+    console.log('Page load completed.');
+  };
+
+  /* Populators */
+  // Home Page
+  App.populator('home', function(page, args) {
+    $(page).find('.tumb-blog-search-submit').on('click', function(event) {
+      var blogUrl = $(page).find('.tumb-blog-search-url').val();
+      console.log('Blog URL: ' + blogUrl);
+      App.load('result', { searchType:'blogs', blogUrl:blogUrl });
     });
   });
 
-  App.populator('dashboard', function(page, args) {
-    if(typeof user !== 'undefined') {
-      $(page).find('#welcome-username').text(user.tumblr.name);
-    }
+  // Result Page
+  App.populator('result', function(page, args) {
 
-    var template = $('#photos-block').html();
+    // Prepare url and parameters
     var pageSize = 5,
-        pageNum = args.pageNum;
+        pageNum = args.pageNum,
+        url = '/tumblr',
+        data = { limit: pageSize, type: 'photo'};
+
     if (!args.pageNum) {
       pageNum = 0;
     }
-    console.log('Loading dashboard, page: ' + pageNum);
-    $(page).find('.tumb-body').css('display', 'none');
 
-    // Construct post DOMs
+    url += '/' + args.searchType;
+    if (args.blogUrl) {
+      url += '/' + args.blogUrl + '/posts';
+      data.offset = pageSize * pageNum;
+    }
+    console.log('URL: ' + url + ' DATA: ' + JSON.stringify(data));
+
+    // Retrive all posts
     $.ajax({
-      url: '/tumblr/user/dashboard',
+      url: url,
       dataType: 'json',
       async: true,
-      data: { limit: pageSize, type: 'photo', offset: pageSize * pageNum },
+      data: data,
       success: function(data) {
-        constructPosts(data.posts);
+        constructPosts(page, data.posts);
       }
     });
-
-    var constructPosts = function(posts) {
-      $.each(posts, function(key, post) {
-        post.index = key;
-        if (post.photos) {
-          $(page).find('.tumb-content').append(_.template(template, post));
-        }
-      });
-
-      // Setup post actions
-      $(page).find('.tumb-post').on('click', function(event) {
-        var postIndex = $(this).attr('data-post-index');
-        App.load('detail', {post:posts[postIndex]});
-      });
-
-      // Setup pagination actions
-      if(pageNum < 1) {
-        $(page).find('.tumb-page-prev').css('display', 'none');
-        $(page).find('.tumb-page-back').css('display', 'none');
-      } else {
-        $(page).find('.tumb-page-back').on('click', function(event) {
-          App.load('dashboard', 'fade');
-        });
-      }
-
-      if(pageNum < (250 / pageSize)) {
-        $(page).find('.tumb-page-next').on('click', function(event) {
-          App.load('dashboard', {pageNum:pageNum + 1}, 'fade');
-        });
-      } else {
-        $(page).find('.tumb-page-next').css('display', 'none');
-      }
-
-      $(page).find('.tumb-body').css('display', '');
-      $(page).find('.tumb-loader').css('display', 'none');
-
-      console.log('Dashboard page #' + pageNum + ' load completed.');
-    };
   }, function(page, args) {
     $(page).find('.tumb-post').unbind();
-    $(page).find('.tumb-page-next').unbind();
-    $(page).find('.tumb-page-back').unbind();
-    console.log('Dashboard page #' + args.pageNum + ' destructed');
+    console.log('Result page destructed');
   });
 
+  // Detail Page
   App.populator('detail', function(page, args) {
     var post = args.post;
     var pic = null;
@@ -95,26 +78,23 @@
       pic = photo.original_size.url;
     });
 
-    $('.tumb-kik-share').on('click', function(event) {
-      cards.kik.send({
+    $(page).find('.tumb-kik-send').on('click', function(event) {
+      var message = {
         title: 'Tumblr Image',
         text: post.caption,
         pic: pic,
         big: true,
         data: post
-      });
+      };
+      console.log(message);
+      cards.kik.send(message);
     });
   });
 
-  // try to restore previous session
-  if(typeof user !== 'undefined') {
-    try {
-      App.restore();
-    } catch (err) {
-      console.log('Failed to restore previous session. ');
-      App.load('dashboard');
-    }
-  } else {
-    App.load('login');
+  try {
+    App.restore();
+  } catch (err) {
+    console.log('Failed to restore previous session. ');
+    App.load('home');
   }
 }).call();

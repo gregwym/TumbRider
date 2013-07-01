@@ -10,49 +10,35 @@ html
 		link(rel="stylesheet", href="/stylesheets/tumbrider.css")
 		script(src="http://cdn.kik.com/cards/0/cards.js")
 	body
-		.app-page(data-page="login")
+		.app-page(data-page="home")
 			.app-topbar
 				.app-title TumbRider
 			.app-content
+				//- .app-section
+				//- 	input.app-input(type="text", placeholder="Seach on Tumblr")
+				//- 	.app-button Search
 				.app-section
-					.app-button(data-target="to-tumblr") Login with Tumblr
-		.app-page(data-page="logout")
+					input.app-input.tumb-blog-search-url(type="text", placeholder="Blog URL (i.e., staff.tumblr.com)")
+					.app-button.tumb-blog-search-submit Go
+		.app-page(data-page="result")
 			.app-topbar
-				.app-title TumbRider
-			.app-content
-				.app-section
-					.app-input Logout......
-		.app-page(data-page="to-tumblr")
-			.app-topbar
-				.app-title Redirecting to Tumblr
-			.app-content
-				ul.app-list.app-section
-					li If not going anywhere, <a href="/auth/tumblr">click here</a>.
-		.app-page(data-page="dashboard")
-			.app-topbar
-				.app-button.left(data-target="logout") Logout
+				.app-button.left(data-back="true") Back
 				.app-title TumbRider
 			.app-content
 				.tumb-body
-					ul.app-list.app-section
-						li Welcome, <span id="welcome-username"></span>.
 					.tumb-content
-					ul.tumb-pagination.app-section
-						li.app-button.tumb-page-prev(data-back="true") Previous
-						li.app-button.tumb-page-next Next
-						li.app-button.tumb-page-back Back to First Page
 				.tumb-loader
 		.app-page(data-page="detail")
 			.app-topbar
 				.app-button.left(data-back="true") Back
 				.app-title TumbRider
-				.app-button.right.tumb-kik-share Kik
+				.app-button.right.tumb-kik-send Kik
 			.app-content
 				ul.app-list.tumb-images
 					//- label Actions
 					//- li.app-button Bookmark
 		// Underscore Templates
-		script(type="text/html", id="photos-block").
+		script(type="text/html", id="post-images").
 			<ul class="app-section tumb-post" data-post-id="<%= id %>" data-post-index="<%= index %>">
 				<%
 					_.each(photos, function(photo, key, list) {
@@ -67,20 +53,6 @@ html
 			<li class="tumb-image"><img src="<%= original_size.url %>" style="width:100%;"></li>
 		// JavaScripts
 		script!= javascript
-		script.
-			// Clean up the session restore stack
-			(function() {
-				var itemName = '__APP_JS_STACK__' + window.location.pathname;
-				var cardStacks = JSON.parse(localStorage.getItem(itemName));
-				var i = 0;
-				for(i = cardStacks.length - 1; i >= 0; i--) {
-					if (cardStacks[i][0] === 'dashboard' && !cardStacks[i][1].pageNum) {
-						break;
-					}
-				}
-				cardStacks = cardStacks.slice(i, cardStacks.length);
-				localStorage.setItem(itemName, JSON.stringify(cardStacks));
-			}).call();
 		script(src="/scripts/zepto.js")
 		script(src="/scripts/appjs.js")
 		script(src="/scripts/underscore.js")
