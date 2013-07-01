@@ -10,8 +10,12 @@ PostsController.display = function(blogHostname, offset) {
 
   var config = global.app.config;
   var blog = new Blog(blogHostname, { consumer_key: config.tumblr_consumer_key });
+  var params = self.req.query;
+  if (offset) {
+    params.offset = offset;
+  }
 
-  blog.photo( { offset: offset }, function(err, response) {
+  blog.photo( params, function(err, response) {
     if(err) {
       return renderError(err);
     }
